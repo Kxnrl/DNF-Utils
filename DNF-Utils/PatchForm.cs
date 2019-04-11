@@ -38,7 +38,7 @@ namespace DNF_Utils
 
         static string BuildPath(string guid)
         {
-            return Path.Combine(Variables.GameFolder, "ImagePacks2", ".patch." + guid + ".NPK");
+            return Path.Combine(Variables.GameFolder, "ImagePacks2", ".2.patch." + guid + ".NPK");
         }
 
         public PatchForm()
@@ -92,18 +92,19 @@ namespace DNF_Utils
                     Application.DoEvents();
                 }));
 
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 Invoke(new Action(() =>
                 {
                     try
                     {
-                        var file = Path.Combine(Variables.BaseFolder, PatchTypeName + ".list");
+                        var file = Path.Combine(Variables.BaseFolder, "cache", PatchTypeName + ".list");
 
                         try
                         {
-                            using (var http = new WebClient())
+                            using (var http = new ExWebClient())
                             {
+                                http.Encoding = Encoding.UTF8;
                                 http.DownloadFile("https://dnf.kxnrl.com/" + PatchTypeName + ".list", file);
                             }
                         }
@@ -332,23 +333,21 @@ namespace DNF_Utils
                             var complex = crt.ToString();
                             foreach (var text in complex.Split('\n'))
                             {
-                                var name = text.Trim();
-                                if (name.Length < 36)
+                                if (text.Length < 36)
                                 {
                                     continue;
                                 }
-
-                                var data = PackageManager.GetNpkData(name);
-                                if (text.Equals(data.GUID))
+                                var data = PackageManager.GetNpkData(text);
+                                if (text.Contains(data.GUID))
                                 {
-                                    complex = complex.Replace(name, data.Name);
+                                    complex = complex.Replace(text.TrimEnd().Trim('\r', '\n'), "[" + PackageManager.GetNpkType(data.Type, false, true) + "]" + "  " + data.Name);
                                 }
                             }
 
                             ret = MessageBox.Show("检查到该补丁与之前安装的主题或其他补丁冲突: " + Environment.NewLine +
                                                   "================" + Environment.NewLine +
                                                   complex, 
-                                                  "检测到冲突", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                                                  "是否继续安装?", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                                                   MessageBoxDefaultButton.Button2);
                         }
 
@@ -396,7 +395,9 @@ namespace DNF_Utils
                     {
                         if (File.Exists(file))
                         {
+                            PackageManager.EraseNPK(Utils.NPKHelper.ReadNPK(file, out Utils.NPKHelper.FileMode flag), file);
                             File.Delete(file);
+                            Utils.NPKScanner.Scan();
                         }
                         patches[e.RowIndex].pDone = false;
                         PatchList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "安装";

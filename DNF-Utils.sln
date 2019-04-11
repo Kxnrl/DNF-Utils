@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNF-Utils", "DNF-Utils\DNF-Utils.csproj", "{38544EB5-3E56-4DD6-B9A8-721B6AD82475}"
+	ProjectSection(ProjectDependencies) = postProject
+		{66828086-7A8D-4983-8BDF-C2BD324DAD9F} = {66828086-7A8D-4983-8BDF-C2BD324DAD9F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNF-Redirect", "DNF-Redirect\DNF-Redirect.csproj", "{66828086-7A8D-4983-8BDF-C2BD324DAD9F}"
 EndProject

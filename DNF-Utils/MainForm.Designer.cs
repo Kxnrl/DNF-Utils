@@ -273,6 +273,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DNF 实用工具集";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.UtilsGroup.ResumeLayout(false);
             this.PatchGroup.ResumeLayout(false);

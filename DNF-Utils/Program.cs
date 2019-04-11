@@ -53,11 +53,8 @@ namespace DNF_Utils
 
             try
             {
-                if (!Directory.Exists(Variables.BaseFolder))
-                {
-                    // base folder
-                    Directory.CreateDirectory(Variables.BaseFolder);
-                }
+                // create Folders
+                CreateFolders();
 
                 // extract All data
                 File.WriteAllBytes(Path.Combine(Variables.BaseFolder, "DNF-Redirect.exe"), Properties.Resources.DNF_Redirect);
@@ -71,6 +68,9 @@ namespace DNF_Utils
 
                 // check new version
                 Utils.Updater.CheckVersion(out Variables.VersionInfo version);
+
+                // handle old file
+
             }
             catch (Exception e)
             {
@@ -117,11 +117,23 @@ namespace DNF_Utils
             {
                 try
                 {
-                    Process.Start("https://dotnet.microsoft.com/download/thank-you/net472-chs");
+                    Process.Start("https://dotnet.microsoft.com/download/thank-you/net472-offline");
                 }
                 catch { }
                 MessageBox.Show("请在弹出的网页中下载并安装.NET Framework 4.7.2", "运行时版本错误");
                 throw new Exception("您的电脑尚未安装.NET Framework 4.7.2或更新的版本");
+            }
+        }
+
+        internal static void CreateFolders()
+        {
+            // base folder
+            Directory.CreateDirectory(Variables.BaseFolder);
+
+            // child
+            foreach (var dir in new string[] { "cache", "themes", "patches", "sounds", "packages" })
+            {
+                Directory.CreateDirectory(Path.Combine(Variables.BaseFolder, dir));
             }
         }
 

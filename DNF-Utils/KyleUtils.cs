@@ -181,4 +181,26 @@
             return sb.ToString();
         }
     }
+
+    class ExWebClient : System.Net.WebClient
+    {
+        public uint Timeout { get; set; }
+
+        public ExWebClient() : this(10000u) { }
+
+        public ExWebClient(uint timeout)
+        {
+            Timeout = timeout;
+        }
+
+        protected override System.Net.WebRequest GetWebRequest(System.Uri address)
+        {
+            var request = base.GetWebRequest(address);
+            if (request != null)
+            {
+                request.Timeout = (int)Timeout;
+            }
+            return request;
+        }
+    }
 }

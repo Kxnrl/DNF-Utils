@@ -38,7 +38,7 @@ namespace DNF_Utils.Utils
         public static void CheckVersion(out Variables.VersionInfo versionInfo)
         {
             versionInfo = new Variables.VersionInfo();
-            var file = Path.Combine(Variables.BaseFolder, "dnf.version");
+            var file = Path.Combine(Variables.BaseFolder, "cache", "version.ini");
 
             try
             {
@@ -48,10 +48,11 @@ namespace DNF_Utils.Utils
                     File.Delete(file);
                 }
 
-                using (var http = new WebClient())
+                using (var http = new ExWebClient())
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+                    http.Encoding = Encoding.UTF8;
                     http.DownloadFile("https://dnf.kxnrl.com/version.ini", file);
 
                     versionInfo.Version = GetIniString(file, "Version", "version");

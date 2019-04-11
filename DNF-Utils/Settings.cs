@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Kxnrl;
+using System;
+using System.IO;
 
 namespace DNF_Utils
 {
     class Settings
     {
+        private static readonly string configFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Kxnrl", "DNF", "dnf.conf");
 
+        public static string lastRunningVersion
+        {
+            get { return Win32Api.IniGet(configFile, "Settings", "lastRunning"); }
+            set { Win32Api.IniSet(configFile, "Settings", "lastRunning", value); }
+        }
     }
 }

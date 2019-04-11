@@ -75,7 +75,7 @@ namespace DNF_Utils
 
         static string BuildPath(FilesData fd)
         {
-            return Path.Combine(Variables.GameFolder, "ImagePacks2", ".theme." + fd.fSque + "." + fd.fGUID + ".NPK");
+            return Path.Combine(Variables.GameFolder, "ImagePacks2", ".1.theme." + fd.fSque + "." + fd.fGUID + ".NPK");
         }
 
         static bool CheckInstalled(FilesData fd)
@@ -112,18 +112,19 @@ namespace DNF_Utils
                     Application.DoEvents();
                 }));
 
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 Invoke(new Action(() =>
                 {
                     try
                     {
-                        var file = Path.Combine(Variables.BaseFolder, "Theme.list");
+                        var file = Path.Combine(Variables.BaseFolder, "cache", "Theme.list");
 
                         try
                         {
-                            using (var http = new WebClient())
+                            using (var http = new ExWebClient())
                             {
+                                http.Encoding = Encoding.UTF8;
                                 http.DownloadFile("https://dnf.kxnrl.com/" + "Theme.list", file);
                             }
                         }
@@ -203,8 +204,9 @@ namespace DNF_Utils
 
                 try
                 {
-                    using (var http = new WebClient())
+                    using (var http = new ExWebClient())
                     {
+                        http.Encoding = Encoding.UTF8;
                         var files = new List<FilesData>();
                         var bytes = http.DownloadData("https://dnf.kxnrl.com/themes/" + path + ".list");
                         foreach (var result in Encoding.UTF8.GetString(bytes).Split('\n'))
@@ -441,13 +443,15 @@ namespace DNF_Utils
 
                 toinstall++;
 
-                var data = DownloadFile("https://dnf.kxnrl.com/themes/" + file.fHash + ".NPK", path, file.fGUID, out string error);
+                var data = DownloadFile("https://dnf.kxnrl.com/themes/" + file.fHash + ".NPK", path, "〔" + theme.tName + "〕 " + file.fName, out string error);
                 if (data > 0 && SetFileAttribute(path, ref error) && File.Exists(path))
                 {
                     var size = (ulong)new FileInfo(path).Length;
                     PackageManager.SaveNpkData(path, new PackageManager.NpkData(file.fName, file.fSque, file.fHash, file.fGUID, size, PackageManager.NpkType.Theme));
                     success++;
                     totalSize += data;
+                    Label_Verify.Text = toinstall + " / " + theme.tFile.Count;
+                    Application.DoEvents();
                 }
                 else
                 {
@@ -491,12 +495,11 @@ namespace DNF_Utils
                         totalDownloadedByte = osize + totalDownloadedByte;
                         fs.Write(bytes, 0, osize);
                         osize = stream.Read(bytes, 0, bytes.Length);
-
-                        ActionLabel.Text = "[" + SetProgressBar((int)totalDownloadedByte).ToString("f1") + "%]" +
-                                            " " + "正在下载" + " " + text + " ..." + "     " +
-                                            " " + totalDownloadedByte / 1024 + "KB" +
-                                            " " + "/" +
-                                            " " + response.ContentLength / 1024 + "KB";
+                        SetProgressBar((int)totalDownloadedByte);
+                        ActionLabel.Text = "正在下载" + " " + text + " ..." + "     " +
+                                           " " + totalDownloadedByte / 1024 + "KB" +
+                                           " " + "/" +
+                                           " " + response.ContentLength / 1024 + "KB";
                         Application.DoEvents();
                     }
 

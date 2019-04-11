@@ -34,7 +34,7 @@ namespace DNF_Utils
             Button_MeltdownSpectre.Text = (Utils.MeltdownSpectre.Check() ? "还原" : "禁用") + "熔断/幽灵补丁";
 
             // 清空垃圾文件
-            
+            //if (Settings.lastRunningVersion.Equals(Variables.Version.Version))
         }
 
         private void Button_TXBucket_Click(object sender, EventArgs e)
@@ -153,6 +153,11 @@ namespace DNF_Utils
             Variables.PatchMode = Variables.PatchType.Theme;
             var child = new ThemeForm();
             child.ShowDialog(this);
+        }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            Settings.lastRunningVersion = Variables.Version.Version;
         }
     }
 }

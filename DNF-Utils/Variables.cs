@@ -29,7 +29,7 @@ namespace DNF_Utils
 
             public override string ToString()
             {
-                return this.Version;
+                return Version;
             }
         }
 

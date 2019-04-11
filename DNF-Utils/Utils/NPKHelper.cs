@@ -113,8 +113,8 @@ namespace DNF_Utils.Utils
     class NPKScanner
     {
 
-        const string pref_theme = ".theme.";
-        const string pref_patch = ".patch.";
+        const string pref_theme = ".1.theme.";
+        const string pref_patch = ".2.patch.";
 
         public static void Scan()
         {
