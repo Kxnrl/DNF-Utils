@@ -44,9 +44,9 @@ namespace DNF_Utils.Utils
             return Files.Count > 0;
         }
 
-        public static long DeleteAll()
+        public static ulong DeleteAll()
         {
-            long totalBytes = 0;
+            var totalBytes = 0ul;
 
             foreach (var file in Files)
             {
@@ -54,7 +54,7 @@ namespace DNF_Utils.Utils
                 {
                     if (File.Exists(file))
                     {
-                        totalBytes += new FileInfo(file).Length;
+                        totalBytes += (ulong)new FileInfo(file).Length;
                         File.Delete(file);
                     }
                 }

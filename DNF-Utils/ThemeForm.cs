@@ -102,6 +102,8 @@ namespace DNF_Utils
         {
             Icon = Properties.Resources.icon;
 
+            Utils.NPKScanner.Scan();
+
             new Thread(() =>
             {
                 Invoke(new Action(() =>
@@ -159,7 +161,6 @@ namespace DNF_Utils
                                 currentInstalled = index;
                                 ThemeSelector.SelectedIndex = index;
                             }
-                            Console.WriteLine("{0} index {1}", theme.tName, index);
                         }
                         ThemeSelector.DropDownStyle = ComboBoxStyle.DropDownList;
                         ThemeSelector.Enabled = true;
@@ -170,7 +171,7 @@ namespace DNF_Utils
                     catch (Exception ex)
                     {
                         MessageBox.Show("初始化补丁列表失败:" + Environment.NewLine + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Logger.LogError("DownloadData [{0}] Exception: {1}", "ThreadInvoker", ex.Message);
+                        Logger.LogError("DownloadData [{0}] Exception: {1} {2} {3}", "ThreadInvoker", ex.Message, Environment.NewLine, ex.StackTrace);
                         Invoke(new Action(() =>
                         {
                             ((MainForm)Owner).Activate();
@@ -199,8 +200,6 @@ namespace DNF_Utils
                 var name = split[0];
                 var path = split[1];
                 var guid = split[2];
-
-                Console.WriteLine($"Load [{name}]");
 
                 try
                 {
@@ -326,7 +325,7 @@ namespace DNF_Utils
             }
 
             SetContorlState(false);
-            var file = DownloadTheme(theme, out int total, out long totalBytes);
+            var file = DownloadTheme(theme, out uint total, out ulong totalBytes);
             var unit = Unit.Byte(totalBytes, out int lvl);
             var lvls = Math.Pow(1024, lvl);
             var curl = totalBytes / lvls;
@@ -363,7 +362,7 @@ namespace DNF_Utils
 
             SetContorlState(false);
             var theme = (ThemeData)ThemeSelector.Items[ThemeSelector.SelectedIndex];
-            var files = DownloadTheme(theme, out int total, out long size);
+            var files = DownloadTheme(theme, out uint total, out ulong size);
             MessageBox.Show("验证成功." + Environment.NewLine + 
                             "================" + Environment.NewLine +
                             "损坏/缺失了 " + total + " 个文件" + Environment.NewLine +
@@ -424,7 +423,7 @@ namespace DNF_Utils
             }
         }
 
-        int DownloadTheme(ThemeData theme, out int toinstall, out long totalSize)
+        int DownloadTheme(ThemeData theme, out uint toinstall, out ulong totalSize)
         {
             var success = 0;
             toinstall = 0;
@@ -445,6 +444,8 @@ namespace DNF_Utils
                 var data = DownloadFile("https://dnf.kxnrl.com/themes/" + file.fHash + ".NPK", path, file.fGUID, out string error);
                 if (data > 0 && SetFileAttribute(path, ref error) && File.Exists(path))
                 {
+                    var size = (ulong)new FileInfo(path).Length;
+                    PackageManager.SaveNpkData(path, new PackageManager.NpkData(file.fName, file.fSque, file.fHash, file.fGUID, size, PackageManager.NpkType.Theme));
                     success++;
                     totalSize += data;
                 }
@@ -458,7 +459,7 @@ namespace DNF_Utils
         }
 
         #region 下载文件
-        private long DownloadFile(string url, string file, string text, out string error)
+        private ulong DownloadFile(string url, string file, string text, out string error)
         {
             var temp = Path.Combine(Variables.BaseFolder, "tempfile.tmp");
 
@@ -511,7 +512,7 @@ namespace DNF_Utils
                     }
                     File.Move(temp, file);
 
-                    return new FileInfo(file).Length;
+                    return (ulong)new FileInfo(file).Length;
                 }
             }
             catch (Exception e)
@@ -547,7 +548,7 @@ namespace DNF_Utils
 
             try
             {
-                //File.SetAttributes(file, File.GetAttributes(file) | FileAttributes.Hidden | FileAttributes.System);
+                File.SetAttributes(file, File.GetAttributes(file) | FileAttributes.Hidden | FileAttributes.System);
                 return true;
             }
             catch (Exception e)

@@ -100,7 +100,7 @@
 
     class Unit
     {
-        public static string Byte(long bytes, out int lvl)
+        public static string Byte(ulong bytes, out int lvl)
         {
             var ret = "Bytes";
 
@@ -160,4 +160,25 @@
         }
     }
 
+    class Win32Api
+    {
+        [System.Runtime.InteropServices.DllImport("kernel32", CharSet = System.Runtime.InteropServices.CharSet.Unicode, SetLastError = true)]
+        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        private static extern bool WritePrivateProfileString(string section, string key, string val, string filepath);
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern int GetPrivateProfileString(string section, string key, string def, System.Text.StringBuilder retval, int size, string filePath);
+
+        public static bool IniSet(string file, string section, string key, string value)
+        {
+            return WritePrivateProfileString(section, key, value, file);
+        }
+
+        public static string IniGet(string file, string section, string key)
+        {
+            var sb = new System.Text.StringBuilder(1024);
+            GetPrivateProfileString(section, key, null, sb, 1024, file);
+            return sb.ToString();
+        }
+    }
 }

@@ -26,13 +26,18 @@ namespace DNF_Utils
             public string Author;
             public string Website;
             public string UpdateURL;
+
+            public override string ToString()
+            {
+                return this.Version;
+            }
         }
 
         public static readonly VersionInfo Version = new VersionInfo()
         {
             Date = "20190402",
             Commit = "4",
-            Version = "1.0.190402",
+            Version = System.Reflection.Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString().Split('.')[0] + "." + System.Reflection.Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString().Split('.')[1] + "." + System.Reflection.Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString().Split('.')[2],
             Description = "DNF实用工具集",
             Author = "Kyle \"Kxnrl\" Frankiss",
             Website = "https://www.kxnrl.com",
@@ -41,4 +46,7 @@ namespace DNF_Utils
 
         public static PatchType PatchMode = PatchType.Character;
     }
+
+    
+
 }

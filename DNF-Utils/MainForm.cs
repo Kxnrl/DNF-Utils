@@ -125,11 +125,6 @@ namespace DNF_Utils
                 var curl = totalBytes / lvls;
                 MessageBox.Show("清理完成!" + Environment.NewLine + "已释放 [" + curl.ToString("f2") + unit + "] 空间", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            Variables.PatchMode = Variables.PatchType.Character;
-
-            var child = new PatchForm();
-            child.ShowDialog(this);
         }
 
         private void Button_PatchCharacter_Click(object sender, EventArgs e)

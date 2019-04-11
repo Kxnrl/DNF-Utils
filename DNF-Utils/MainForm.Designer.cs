@@ -34,10 +34,10 @@
             this.Button_BlueScreen = new System.Windows.Forms.Button();
             this.Button_TXBucket = new System.Windows.Forms.Button();
             this.PatchGroup = new System.Windows.Forms.GroupBox();
-            this.Button_PatchCharacter = new System.Windows.Forms.Button();
-            this.Button_PatchOptimized = new System.Windows.Forms.Button();
-            this.Button_PatchMisc = new System.Windows.Forms.Button();
             this.Button_PatchTheme = new System.Windows.Forms.Button();
+            this.Button_PatchMisc = new System.Windows.Forms.Button();
+            this.Button_PatchOptimized = new System.Windows.Forms.Button();
+            this.Button_PatchCharacter = new System.Windows.Forms.Button();
             this.UtilsGroup.SuspendLayout();
             this.PatchGroup.SuspendLayout();
             this.SuspendLayout();
@@ -171,49 +171,27 @@
             this.PatchGroup.TabStop = false;
             this.PatchGroup.Text = "补丁管理";
             // 
-            // Button_PatchCharacter
+            // Button_PatchTheme
             // 
-            this.Button_PatchCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Button_PatchTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_PatchCharacter.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Button_PatchCharacter.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
-            this.Button_PatchCharacter.FlatAppearance.BorderSize = 0;
-            this.Button_PatchCharacter.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.Button_PatchCharacter.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.Button_PatchCharacter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_PatchCharacter.ForeColor = System.Drawing.Color.DarkViolet;
-            this.Button_PatchCharacter.Location = new System.Drawing.Point(8, 22);
-            this.Button_PatchCharacter.Name = "Button_PatchCharacter";
-            this.Button_PatchCharacter.Size = new System.Drawing.Size(484, 25);
-            this.Button_PatchCharacter.TabIndex = 1;
-            this.Button_PatchCharacter.TabStop = false;
-            this.Button_PatchCharacter.Text = "角色补丁";
-            this.Button_PatchCharacter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Button_PatchCharacter.UseVisualStyleBackColor = true;
-            this.Button_PatchCharacter.Click += new System.EventHandler(this.Button_PatchCharacter_Click);
-            // 
-            // Button_PatchOptimized
-            // 
-            this.Button_PatchOptimized.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_PatchOptimized.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Button_PatchOptimized.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
-            this.Button_PatchOptimized.FlatAppearance.BorderSize = 0;
-            this.Button_PatchOptimized.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.Button_PatchOptimized.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.Button_PatchOptimized.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_PatchOptimized.ForeColor = System.Drawing.Color.DarkViolet;
-            this.Button_PatchOptimized.Location = new System.Drawing.Point(8, 53);
-            this.Button_PatchOptimized.Name = "Button_PatchOptimized";
-            this.Button_PatchOptimized.Size = new System.Drawing.Size(484, 25);
-            this.Button_PatchOptimized.TabIndex = 2;
-            this.Button_PatchOptimized.TabStop = false;
-            this.Button_PatchOptimized.Text = "优化补丁";
-            this.Button_PatchOptimized.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Button_PatchOptimized.UseVisualStyleBackColor = true;
-            this.Button_PatchOptimized.Click += new System.EventHandler(this.Button_PatchOptimized_Click);
+            this.Button_PatchTheme.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Button_PatchTheme.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
+            this.Button_PatchTheme.FlatAppearance.BorderSize = 0;
+            this.Button_PatchTheme.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_PatchTheme.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_PatchTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_PatchTheme.ForeColor = System.Drawing.Color.DarkViolet;
+            this.Button_PatchTheme.Location = new System.Drawing.Point(8, 115);
+            this.Button_PatchTheme.Name = "Button_PatchTheme";
+            this.Button_PatchTheme.Size = new System.Drawing.Size(484, 25);
+            this.Button_PatchTheme.TabIndex = 4;
+            this.Button_PatchTheme.TabStop = false;
+            this.Button_PatchTheme.Text = "主题补丁";
+            this.Button_PatchTheme.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Button_PatchTheme.UseVisualStyleBackColor = true;
+            this.Button_PatchTheme.Click += new System.EventHandler(this.Button_PatchTheme_Click);
             // 
             // Button_PatchMisc
             // 
@@ -237,27 +215,49 @@
             this.Button_PatchMisc.UseVisualStyleBackColor = true;
             this.Button_PatchMisc.Click += new System.EventHandler(this.Button_PatchMisc_Click);
             // 
-            // Button_PatchTheme
+            // Button_PatchOptimized
             // 
-            this.Button_PatchTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Button_PatchOptimized.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_PatchTheme.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Button_PatchTheme.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
-            this.Button_PatchTheme.FlatAppearance.BorderSize = 0;
-            this.Button_PatchTheme.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.Button_PatchTheme.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.Button_PatchTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_PatchTheme.ForeColor = System.Drawing.Color.DarkViolet;
-            this.Button_PatchTheme.Location = new System.Drawing.Point(8, 115);
-            this.Button_PatchTheme.Name = "Button_PatchTheme";
-            this.Button_PatchTheme.Size = new System.Drawing.Size(484, 25);
-            this.Button_PatchTheme.TabIndex = 4;
-            this.Button_PatchTheme.TabStop = false;
-            this.Button_PatchTheme.Text = "主题补丁";
-            this.Button_PatchTheme.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Button_PatchTheme.UseVisualStyleBackColor = true;
-            this.Button_PatchTheme.Click += new System.EventHandler(this.Button_PatchTheme_Click);
+            this.Button_PatchOptimized.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Button_PatchOptimized.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
+            this.Button_PatchOptimized.FlatAppearance.BorderSize = 0;
+            this.Button_PatchOptimized.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_PatchOptimized.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_PatchOptimized.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_PatchOptimized.ForeColor = System.Drawing.Color.DarkViolet;
+            this.Button_PatchOptimized.Location = new System.Drawing.Point(8, 53);
+            this.Button_PatchOptimized.Name = "Button_PatchOptimized";
+            this.Button_PatchOptimized.Size = new System.Drawing.Size(484, 25);
+            this.Button_PatchOptimized.TabIndex = 2;
+            this.Button_PatchOptimized.TabStop = false;
+            this.Button_PatchOptimized.Text = "优化补丁";
+            this.Button_PatchOptimized.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Button_PatchOptimized.UseVisualStyleBackColor = true;
+            this.Button_PatchOptimized.Click += new System.EventHandler(this.Button_PatchOptimized_Click);
+            // 
+            // Button_PatchCharacter
+            // 
+            this.Button_PatchCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_PatchCharacter.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Button_PatchCharacter.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
+            this.Button_PatchCharacter.FlatAppearance.BorderSize = 0;
+            this.Button_PatchCharacter.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_PatchCharacter.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_PatchCharacter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_PatchCharacter.ForeColor = System.Drawing.Color.DarkViolet;
+            this.Button_PatchCharacter.Location = new System.Drawing.Point(8, 22);
+            this.Button_PatchCharacter.Name = "Button_PatchCharacter";
+            this.Button_PatchCharacter.Size = new System.Drawing.Size(484, 25);
+            this.Button_PatchCharacter.TabIndex = 1;
+            this.Button_PatchCharacter.TabStop = false;
+            this.Button_PatchCharacter.Text = "角色补丁";
+            this.Button_PatchCharacter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Button_PatchCharacter.UseVisualStyleBackColor = true;
+            this.Button_PatchCharacter.Click += new System.EventHandler(this.Button_PatchCharacter_Click);
             // 
             // MainForm
             // 
@@ -272,7 +272,7 @@
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DNF 实用工具集 v1.0.190329";
+            this.Text = "DNF 实用工具集";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.UtilsGroup.ResumeLayout(false);
             this.PatchGroup.ResumeLayout(false);

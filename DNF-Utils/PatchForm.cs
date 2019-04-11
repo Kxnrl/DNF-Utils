@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -54,6 +55,8 @@ namespace DNF_Utils
         private void PatchForm_Load(object sender, EventArgs e)
         {
             Icon = Properties.Resources.icon;
+
+            Utils.NPKScanner.Scan();
 
             switch (Variables.PatchMode)
             {
@@ -241,6 +244,28 @@ namespace DNF_Utils
             Progressbar.CreateGraphics().DrawString(perc.ToString("f0") + "%", new Font("微软雅黑 Light", 15, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.Magenta, new PointF(Progressbar.Width / 2 - 15, Progressbar.Height / 2 - 10));
             return perc;
         }
+
+        private bool SetFileAttribute(string file, ref string error)
+        {
+            if (!File.Exists(file))
+            {
+                // wtf?
+                return false;
+            }
+
+            try
+            {
+                File.SetAttributes(file, File.GetAttributes(file) | FileAttributes.Hidden | FileAttributes.System);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("SetAttributesError [{0}] Exception: {1}", file, e.Message);
+                error = e.Message;
+            }
+
+            return false;
+        }
         #endregion
 
         private static bool CheckInstalled(string guid, string hash)
@@ -278,12 +303,76 @@ namespace DNF_Utils
 
                 if (PatchList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() == "安装" && !p.pDone && !File.Exists(file))
                 {
-                    var data = DownloadFile(url + p.pHash + ".NPK", file, p.pName, out string error);
-                    if (data > 0 && SetFileAttribute(file, ref error) && File.Exists(file))
+                    var size = DownloadFile(url + p.pHash + ".NPK", file, p.pName, out string error);
+                    if (size > 0 && SetFileAttribute(file, ref error) && File.Exists(file))
                     {
-                        patches[e.RowIndex].pDone = true;
-                        PatchList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "卸载";
-                        ActionLabel.Text = "安装 [" + p.pName + "] 成功!";
+                        var npk = Utils.NPKHelper.ReadNPK(file, out Utils.NPKHelper.FileMode fm);
+                        var crt = new StringBuilder(1024);
+                        var ret = DialogResult.Yes;
+                        var nct = 0;
+
+                        foreach (var img in npk)
+                        {
+                            if (PackageManager.ListIMG.Contains(img))
+                            {
+                                foreach (var text in PackageManager.DictIMG[img].Split('|'))
+                                {
+                                    if (crt.ToString().Contains(text))
+                                    {
+                                        continue;
+                                    }
+                                    crt.AppendFormat("{0}{1}", text, '\n');
+                                }
+                                nct++;
+                            }
+                        }
+
+                        if (nct > 0)
+                        {
+                            var complex = crt.ToString();
+                            foreach (var text in complex.Split('\n'))
+                            {
+                                var name = text.Trim();
+                                if (name.Length < 36)
+                                {
+                                    continue;
+                                }
+
+                                var data = PackageManager.GetNpkData(name);
+                                if (text.Equals(data.GUID))
+                                {
+                                    complex = complex.Replace(name, data.Name);
+                                }
+                            }
+
+                            ret = MessageBox.Show("检查到该补丁与之前安装的主题或其他补丁冲突: " + Environment.NewLine +
+                                                  "================" + Environment.NewLine +
+                                                  complex, 
+                                                  "检测到冲突", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                                                  MessageBoxDefaultButton.Button2);
+                        }
+
+                        if (ret == DialogResult.Yes)
+                        {
+                            patches[e.RowIndex].pDone = true;
+                            PatchList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "卸载";
+                            ActionLabel.Text = "安装 [" + p.pName + "] 成功!";
+                            try
+                            {
+                                PackageManager.AppendNPK(npk, file);
+                                PackageManager.SaveNpkData(file, new PackageManager.NpkData(p.pName, p.pDesc, p.pHash, p.pGUID, (ulong)new FileInfo(file).Length, PackageManager.NpkType.Patch));
+                            }
+                            catch { }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                File.Delete(file);
+                            }
+                            catch { }
+                            ActionLabel.Text = "已取消安装 [" + p.pName + "] !";
+                        }
                         /*
                         MessageBox.Show("安装 [" + p.pName + "] 成功!" + Environment.NewLine +
                                 "=========================" + Environment.NewLine +
@@ -320,28 +409,6 @@ namespace DNF_Utils
             }
         }
 
-        private bool SetFileAttribute(string file, ref string error)
-        {
-            if (!File.Exists(file))
-            {
-                // wtf?
-                return false;
-            }
-
-            try
-            {
-                File.SetAttributes(file, File.GetAttributes(file) | FileAttributes.Hidden | FileAttributes.System);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Logger.LogError("SetAttributesError [{0}] Exception: {1}", file, e.Message);
-                error = e.Message;
-            }
-
-            return false;
-        }
-
         private void Label_Kxnrl_DoubleClick(object sender, EventArgs e)
         {
             if (MessageBox.Show("如果你喜欢这个软件, 请到GitHub点个Star吧.", "嘤嘤嘤", 
@@ -369,7 +436,7 @@ namespace DNF_Utils
             try
             {
                 var NPKFileDir = Path.Combine(Variables.GameFolder, "ImagePacks2");
-                var totalBytes = 0L;
+                var totalBytes = 0ul;
                 foreach (var file in Directory.GetFiles(NPKFileDir, "*.NPK", SearchOption.TopDirectoryOnly))
                 {
                     if (file.StartsWith(Path.Combine(NPKFileDir, "sprite")))
@@ -378,7 +445,7 @@ namespace DNF_Utils
                         continue;
                     }
 
-                    totalBytes += new FileInfo(file).Length;
+                    totalBytes += (ulong)new FileInfo(file).Length;
                     File.Delete(file);
                 }
 

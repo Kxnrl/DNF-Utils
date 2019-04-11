@@ -84,6 +84,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PackageManager.cs" />
     <Compile Include="PatchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +105,7 @@
     <Compile Include="Utils\Cleaner.cs" />
     <Compile Include="Utils\Finder.cs" />
     <Compile Include="Utils\MeltdownSpectre.cs" />
+    <Compile Include="Utils\NPKHelper.cs" />
     <Compile Include="Utils\Updater.cs" />
     <Compile Include="Variables.cs" />
     <EmbeddedResource Include="MainForm.resx">

@@ -10,17 +10,29 @@ namespace DNF_Utils.Utils
 {
     class Updater
     {
-        public static uint currentVersion
+        public static uint Major
         {
-            get
+            get { return currentVersion(0); }
+        }
+
+        public static uint Minor
+        {
+            get { return currentVersion(1); }
+        }
+
+        public static uint Builld
+        {
+            get { return currentVersion(2); }
+        }
+
+        public static uint currentVersion (int index)
+        {
+            try
             {
-                try
-                {
-                    var s = Variables.Version.Version.Split('.');
-                    return uint.Parse(s[2]);
-                }
-                catch { return 0; }
+                var s = Variables.Version.Version.Split('.');
+                return uint.Parse(s[index]);
             }
+            catch { return 0; }
         }
 
         public static void CheckVersion(out Variables.VersionInfo versionInfo)
@@ -46,12 +58,18 @@ namespace DNF_Utils.Utils
 
                     string[] latest = versionInfo.Version.Split('.');
 
-                    if (latest.Length != 3 || !uint.TryParse(latest[2], out uint latestVersion))
+                    if (latest.Length != 3 || 
+                        !uint.TryParse(latest[2], out uint latestBuild) ||
+                        !uint.TryParse(latest[1], out uint latestMinor) ||
+                        !uint.TryParse(latest[0], out uint latestMajor)
+                        )
                     {
                         throw new Exception("版本号检查错误 -> 本地版本[" + Variables.Version.Version + "] 远程版本[" + versionInfo.Version + "].");
                     }
 
-                    if (latestVersion > currentVersion)
+                    if (latestMajor  > Major ||
+                       (latestMajor == Major && latestMinor  > Minor) ||
+                       (latestMajor == Major && latestMinor == Minor && latestBuild > Builld))
                     {
                         versionInfo.Author = GetIniString(file, "Description", "author");
                         versionInfo.Commit = GetIniString(file, "Version", "commit");
@@ -60,7 +78,7 @@ namespace DNF_Utils.Utils
                         versionInfo.Description = GetIniString(file, "Description", "description");
                         versionInfo.Website = GetIniString(file, "Description", "website");
                         
-                        if (MessageBox.Show("发现新版本 [" + versionInfo.Version + "]" + Environment.NewLine + "是否立即更新?", "发现新版本",
+                        if (MessageBox.Show("发现新版本 [" + versionInfo.Version + "]" + Environment.NewLine + "是否立即更新? ", "发现新版本",
                             MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
                             == DialogResult.Yes)
                         {
