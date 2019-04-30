@@ -1,6 +1,7 @@
 ﻿using Kxnrl;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -8,6 +9,21 @@ namespace DNF_Utils.Utils
 {
     class Finder
     {
+        private static List<string> whitelist = new List<string>()
+        {
+            "$windows",
+            "$recycle.bin",
+            "windows kits",
+            "microsoft",
+            "blizzard",
+            "steamapps",
+            "appdata",
+            @"c:\windows",
+            @"c:\programdata",
+            @"c:\temp",
+            @"c:\user"
+        };
+
         public static string Find()
         {
             var ret = string.Empty;
@@ -124,6 +140,10 @@ namespace DNF_Utils.Utils
 
         private static void Foreach(string path, ref string find)
         {
+            var temp = path.ToLower();
+            if (whitelist.Contains(temp))
+                return;
+
             var c = 0;
             var d = Directory.GetDirectories(path);
 

@@ -47,7 +47,7 @@ namespace DNF_Utils
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + Environment.NewLine + e.Source, "致命错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(e.Message + Environment.NewLine, "致命错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
 
@@ -97,7 +97,8 @@ namespace DNF_Utils
                     if (ndp != null && ndp.GetValue("Release") != null)
                     {
                         var version = Convert.ToInt32(ndp.GetValue("Release"));
-                        if (version < 461814)
+                        //https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
+                        if (version < 461808) //461814
                         {
                             installed = false;
                         }
