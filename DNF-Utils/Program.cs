@@ -18,22 +18,45 @@ namespace DNF_Utils
         static void Main()
         {
             // Mutex
-            var self = new Mutex(true, "com.kxnrl.dnf", out bool allow);
+            var self = new Mutex(true, "com.kxnrl.dnf.utils", out bool allow);
             if (!allow)
             {
                 MessageBox.Show("已有一个实例在运行了...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
 
+            // Exception Handler
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ExceptionHandler_CurrentThread);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler_AppDomain);
+
+            // Visual
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             try
             {
-                // Load Library
-                //AppDomain.CurrentDomain.AssemblyResolve += (s, e) =>
-                //{
-                //    var filename = new AssemblyName(e.Name).Name;
-                //    return Assembly.LoadFrom(Path.Combine(Variables.BaseFolder, filename)); ;
-                //};
+                new Thread(() =>
+                {
+                    MessageBox.Show("初始化中..." + Environment.NewLine + "================" + Environment.NewLine + "需要一点时间...", ":: DNF-Utils ::", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }).Start();
 
+                // check new version
+                Utils.Updater.CheckVersion(out Variables.VersionInfo version);
+
+                // check game
+                CheckGame();
+
+                // CloseWB
+                CloseTips();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            try
+            {
                 // .NET framework
                 CheckDotNetFramework();
 
@@ -57,32 +80,16 @@ namespace DNF_Utils
                 CreateFolders();
 
                 // extract All data
-                File.WriteAllBytes(Path.Combine(Variables.BaseFolder, "DNF-Redirect.exe"), Properties.Resources.DNF_Redirect);
-
-                // check game
-                Variables.GameFolder = Utils.Finder.Find();
-                if (string.IsNullOrEmpty(Variables.GameFolder))
-                {
-                    throw new Exception("您的电脑尚未安装DNF");
-                }
-
-                // check new version
-                Utils.Updater.CheckVersion(out Variables.VersionInfo version);
+                ExtraFiles();
 
                 // handle old file
-
+                ClearCache();
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            Application.ThreadException += new ThreadExceptionEventHandler(ExceptionHandler_CurrentThread);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler_AppDomain);
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
 
@@ -135,6 +142,65 @@ namespace DNF_Utils
             foreach (var dir in new string[] { "cache", "themes", "patches", "sounds", "packages" })
             {
                 Directory.CreateDirectory(Path.Combine(Variables.BaseFolder, dir));
+            }
+        }
+
+        internal static void ExtraFiles()
+        {
+            File.WriteAllBytes(Path.Combine(Variables.BaseFolder, "DNF-Redirect.exe"), Properties.Resources.DNF_Redirect);
+        }
+
+        internal static void ClearCache()
+        {
+            foreach (var file in Directory.GetFiles(Path.Combine(Variables.BaseFolder, "cache")))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch { }
+            }
+        }
+
+        internal static void CheckGame()
+        {
+            Variables.GameFolder = Settings.lastGamePath;
+                
+            if (string.IsNullOrEmpty(Variables.GameFolder))
+            {
+                Variables.GameFolder = Utils.Finder.Find();
+                //Console.WriteLine("Find [{0}]", Variables.GameFolder);
+            }
+
+            if (string.IsNullOrEmpty(Variables.GameFolder))
+            {
+                CloseTips();
+
+                using (var fileBrowser = new OpenFileDialog())
+                {
+                    fileBrowser.Multiselect = false;
+                    fileBrowser.DereferenceLinks = true;
+                    fileBrowser.Title = "无法扫描到您的DNF安装目录, 请手动选择";
+                    fileBrowser.Filter = "地下城与勇士|DNF.exe";
+
+                    if (fileBrowser.ShowDialog() != DialogResult.OK)
+                    {
+                        MessageBox.Show("程序已退出...", ":: DNF-Utils ::", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        Environment.Exit(-2);
+                    }
+
+                    Variables.GameFolder = Path.GetDirectoryName(fileBrowser.FileName);
+                    //Console.WriteLine("Set [{0}]", Variables.GameFolder);
+                }
+            }
+        }
+
+        internal static void CloseTips()
+        {
+            IntPtr mbWnd = Win32Api.FindWindow("#32770", ":: DNF-Utils ::"); // lpClassName is #32770 for MessageBox
+            if (mbWnd != IntPtr.Zero)
+            {
+                Win32Api.SendMessage(mbWnd, Win32Api.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
         }
 

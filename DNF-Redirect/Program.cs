@@ -27,7 +27,7 @@ namespace DNF_Redirect
                     sb.Append(args[index]);
                 }
 
-                sr.WriteLine(string.Format("[{0}]  Launched {1} by [{2}]", DateTime.Now.ToString(), sb.ToString(), p_name));
+                sr.WriteLine(string.Format("[{0}]  Launched {1} by [{2}]", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), sb.ToString(), p_name));
             }
         }
 

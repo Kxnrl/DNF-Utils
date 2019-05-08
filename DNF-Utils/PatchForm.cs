@@ -1,6 +1,7 @@
 ﻿using Kxnrl;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -98,57 +99,39 @@ namespace DNF_Utils
                 {
                     try
                     {
-                        var file = Path.Combine(Variables.BaseFolder, "cache", PatchTypeName + ".list");
-
-                        try
+                        using (var http = new ExWebClient())
                         {
-                            using (var http = new ExWebClient())
+                            http.Encoding = Encoding.UTF8;
+                            var data = Encoding.UTF8.GetString(http.DownloadData("https://dnf.kxnrl.com/" + PatchTypeName + ".list")).Split('\n');
+
+                            if (data.Length == 0)
                             {
-                                http.Encoding = Encoding.UTF8;
-                                http.DownloadFile("https://dnf.kxnrl.com/" + PatchTypeName + ".list", file);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.LogError("LoadListError [{0}] Exception: {1}", PatchTypeName, ex.Message);
-                            MessageBox.Show("连接到远程服务器失败:" + Environment.NewLine + ex.Message + Environment.NewLine +
-                                            "将尝试读取本地文件", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-
-                        if (!File.Exists(file))
-                        {
-                            ActionLabel.Text = "补丁列表文件已损坏...";
-                            throw new Exception ("补丁列表文件已损坏");
-                        }
-
-                        var data = File.ReadAllText(file).Split('\n');
-                        if (data.Length == 0)
-                        {
-                            // null
-                            ActionLabel.Text = "补丁列表为空";
-                            throw new Exception("补丁列表为空");
-                        }
-
-                        patches.Clear();
-
-                        foreach (var patch in data)
-                        {
-                            var split = patch.Split('|');
-                            if (split.Length != 4)
-                            {
-                                // ???
-                                continue;
+                                // null
+                                ActionLabel.Text = "补丁列表为空";
+                                throw new Exception("补丁列表为空");
                             }
 
-                            patches.Add(new Patches(split[0], split[1], split[2].ToLowerInvariant(), split[3]));
-                        }
+                            patches.Clear();
 
-                        Progressbar.Value = Progressbar.Maximum;
-                        ActionLabel.Text = "初始化完成...";
+                            foreach (var patch in data)
+                            {
+                                var split = patch.Split('|');
+                                if (split.Length != 4)
+                                {
+                                    // ???
+                                    continue;
+                                }
 
-                        foreach (var p in patches)
-                        {
-                            PatchList.Rows.Add(p.pGUID, p.pName, p.pDesc, p.pDone ? "卸载" : "安装");
+                                patches.Add(new Patches(split[0], split[1], split[2].ToLowerInvariant(), split[3]));
+                            }
+
+                            Progressbar.Value = Progressbar.Maximum;
+                            ActionLabel.Text = "初始化完成...";
+
+                            foreach (var p in patches)
+                            {
+                                PatchList.Rows.Add(p.pGUID, p.pName, p.pDesc, p.pDone ? "卸载" : "安装");
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -476,6 +459,18 @@ namespace DNF_Utils
             PatchList.Enabled = enabled;
             Button_Clear.Enabled = enabled;
             Label_Kxnrl.Enabled = enabled;
+        }
+
+        private void Button_Dir_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start("explorer.exe", "\"" + Path.Combine(Variables.GameFolder, "ImagePacks2") + "\"");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("发生错误: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

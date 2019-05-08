@@ -40,11 +40,12 @@ namespace DNF_Utils.Utils
                 return ret;
             }
 
-            if (Search(ref ret))
-            {
-                // find
-                return ret;
-            }
+            // Temp disabled Scanner
+            //if (Search(ref ret))
+            //{
+            //    // find
+            //    return ret;
+            //}
 
             return string.Empty;
         }

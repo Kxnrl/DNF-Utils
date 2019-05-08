@@ -38,7 +38,7 @@ namespace DNF_Utils.Utils
         public static void CheckVersion(out Variables.VersionInfo versionInfo)
         {
             versionInfo = new Variables.VersionInfo();
-            var file = Path.Combine(Variables.BaseFolder, "cache", "version.ini");
+            var file = Path.Combine(Variables.BaseFolder, "cache", "version.db");
 
             try
             {

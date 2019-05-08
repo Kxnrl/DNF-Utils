@@ -67,6 +67,8 @@ namespace DNF_Utils.Utils
             {
                 var count = 0;
 
+                MessageBox.Show("若安全管家/助手提示IFEO劫持(系统映像劫持)请选择信任本程序." + Environment.NewLine + "本程序利用Windows IFEO功能对全家桶进行拦截." + Environment.NewLine + "详情可百度IFEO", "注意", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                 foreach (var app in IFEOList)
                 {
                     try

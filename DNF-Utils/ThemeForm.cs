@@ -118,56 +118,38 @@ namespace DNF_Utils
                 {
                     try
                     {
-                        var file = Path.Combine(Variables.BaseFolder, "cache", "Theme.list");
-
-                        try
+                        using (var http = new ExWebClient())
                         {
-                            using (var http = new ExWebClient())
+                            http.Encoding = Encoding.UTF8;
+                            var text = Encoding.UTF8.GetString(http.DownloadData("https://dnf.kxnrl.com/" + "Theme.list")).Split('\n');
+
+                            if (text.Length == 0)
                             {
-                                http.Encoding = Encoding.UTF8;
-                                http.DownloadFile("https://dnf.kxnrl.com/" + "Theme.list", file);
+                                // null
+                                ActionLabel.Text = "补丁列表为空";
+                                throw new Exception("补丁列表为空");
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.LogError("LoadListError [{0}] Exception: {1}", "Theme", ex.Message);
-                            MessageBox.Show("连接到远程服务器失败:" + Environment.NewLine + ex.Message + Environment.NewLine +
-                                            "将尝试读取本地文件", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
 
-                        if (!File.Exists(file))
-                        {
-                            ActionLabel.Text = "补丁列表文件已损坏...";
-                            throw new Exception("补丁列表文件已损坏");
-                        }
-
-                        var text = File.ReadAllText(file).Split('\n');
-                        if (text.Length == 0)
-                        {
-                            // null
-                            ActionLabel.Text = "补丁列表为空";
-                            throw new Exception("补丁列表为空");
-                        }
-
-                        defaultIndex = ThemeSelector.Items.Add(new ThemeData("国服DNF原版界面"));
-                        ThemeSelector.SelectedIndex = defaultIndex;
-                        currentInstalled = defaultIndex;
-                        foreach (var theme in LoadThemes(text))
-                        {
-                            var index = ThemeSelector.Items.Add(theme);
-                            CheckValidation(theme.tFile, out int installed);
-                            if (installed > 0)
+                            defaultIndex = ThemeSelector.Items.Add(new ThemeData("国服DNF原版界面"));
+                            ThemeSelector.SelectedIndex = defaultIndex;
+                            currentInstalled = defaultIndex;
+                            foreach (var theme in LoadThemes(text))
                             {
-                                // installed
-                                currentInstalled = index;
-                                ThemeSelector.SelectedIndex = index;
+                                var index = ThemeSelector.Items.Add(theme);
+                                CheckValidation(theme.tFile, out int installed);
+                                if (installed > 0)
+                                {
+                                    // installed
+                                    currentInstalled = index;
+                                    ThemeSelector.SelectedIndex = index;
+                                }
                             }
-                        }
-                        ThemeSelector.DropDownStyle = ComboBoxStyle.DropDownList;
-                        ThemeSelector.Enabled = true;
+                            ThemeSelector.DropDownStyle = ComboBoxStyle.DropDownList;
+                            ThemeSelector.Enabled = true;
 
-                        Progressbar.Value = Progressbar.Maximum;
-                        ActionLabel.Text = "初始化完成...";
+                            Progressbar.Value = Progressbar.Maximum;
+                            ActionLabel.Text = "初始化完成...";
+                        }
                     }
                     catch (Exception ex)
                     {

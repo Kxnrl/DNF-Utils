@@ -169,6 +169,16 @@
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         private static extern int GetPrivateProfileString(string section, string key, string def, System.Text.StringBuilder retval, int size, string filePath);
 
+        public const int WM_CLOSE = 0x0010;
+        [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+        internal static extern System.IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        internal static extern System.IntPtr SendMessage(System.IntPtr hWnd, uint Msg, System.IntPtr wParam, System.IntPtr lParam);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(System.IntPtr hWnd);
+
         public static bool IniSet(string file, string section, string key, string value)
         {
             return WritePrivateProfileString(section, key, value, file);

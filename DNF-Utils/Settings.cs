@@ -13,5 +13,18 @@ namespace DNF_Utils
             get { return Win32Api.IniGet(configFile, "Settings", "lastRunning"); }
             set { Win32Api.IniSet(configFile, "Settings", "lastRunning", value); }
         }
+
+        public static string lastRunningDate
+        {
+            get { return Win32Api.IniGet(configFile, "Settings", "lastDate"); }
+            set { Win32Api.IniSet(configFile, "Settings", "lastDate", value); }
+        }
+
+        public static string lastGamePath
+        {
+            get { return Win32Api.IniGet(configFile, "Settings", "lastGamePath"); }
+            set { Win32Api.IniSet(configFile, "Settings", "lastGamePath", value); }
+        }
+
     }
 }

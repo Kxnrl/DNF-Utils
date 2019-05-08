@@ -38,6 +38,7 @@
             this.ActionLabel = new System.Windows.Forms.Label();
             this.Label_Kxnrl = new System.Windows.Forms.Label();
             this.Button_Clear = new System.Windows.Forms.Button();
+            this.Button_Dir = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PatchList)).BeginInit();
             this.HandleGroup.SuspendLayout();
             this.SuspendLayout();
@@ -174,10 +175,30 @@
             this.Button_Clear.UseVisualStyleBackColor = false;
             this.Button_Clear.Click += new System.EventHandler(this.Button_Clear_Click);
             // 
+            // Button_Dir
+            // 
+            this.Button_Dir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Dir.BackColor = System.Drawing.Color.Transparent;
+            this.Button_Dir.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.Button_Dir.FlatAppearance.BorderSize = 0;
+            this.Button_Dir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_Dir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_Dir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Dir.Font = new System.Drawing.Font("微软雅黑 Light", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Button_Dir.Location = new System.Drawing.Point(95, 300);
+            this.Button_Dir.Name = "Button_Dir";
+            this.Button_Dir.Size = new System.Drawing.Size(90, 22);
+            this.Button_Dir.TabIndex = 9;
+            this.Button_Dir.TabStop = false;
+            this.Button_Dir.Text = "打开补丁目录";
+            this.Button_Dir.UseVisualStyleBackColor = false;
+            this.Button_Dir.Click += new System.EventHandler(this.Button_Dir_Click);
+            // 
             // PatchForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(624, 321);
+            this.Controls.Add(this.Button_Dir);
             this.Controls.Add(this.Button_Clear);
             this.Controls.Add(this.Label_Kxnrl);
             this.Controls.Add(this.HandleGroup);
@@ -208,5 +229,6 @@
         private System.Windows.Forms.DataGridViewButtonColumn pAction;
         private System.Windows.Forms.Label Label_Kxnrl;
         private System.Windows.Forms.Button Button_Clear;
+        private System.Windows.Forms.Button Button_Dir;
     }
 }

@@ -35,6 +35,9 @@ namespace DNF_Utils
 
             // 清空垃圾文件
             //if (Settings.lastRunningVersion.Equals(Variables.Version.Version))
+
+            // Active
+            Activate();
         }
 
         private void Button_TXBucket_Click(object sender, EventArgs e)
@@ -158,6 +161,7 @@ namespace DNF_Utils
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             Settings.lastRunningVersion = Variables.Version.Version;
+            Settings.lastRunningDate = DateTime.Now.ToString("yyyy/MM/dd");
         }
     }
 }
