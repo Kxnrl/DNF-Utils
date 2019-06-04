@@ -1,6 +1,7 @@
 ﻿using Kxnrl;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -308,6 +309,9 @@ namespace DNF_Utils
                 CleanTheme(ThemeSelector.SelectedIndex);
             }
 
+            if (!KillAllProcess())
+                return;
+
             SetContorlState(false);
             var file = DownloadTheme(theme, out uint total, out ulong totalBytes);
             var unit = Unit.Byte(totalBytes, out int lvl);
@@ -343,6 +347,9 @@ namespace DNF_Utils
                 }
                 CleanTheme(ThemeSelector.SelectedIndex);
             }
+
+            if (!KillAllProcess())
+                return;
 
             SetContorlState(false);
             var theme = (ThemeData)ThemeSelector.Items[ThemeSelector.SelectedIndex];
@@ -442,6 +449,36 @@ namespace DNF_Utils
             }
 
             return success;
+        }
+
+        static bool KillAllProcess()
+        {
+            var list = Process.GetProcessesByName("DNF");
+
+            if (list.Length > 0)
+            {
+                var sb = new StringBuilder("侦测到以下程序", 10240);
+                sb.AppendLine("点击[是]将会强制关闭所有进程,");
+                sb.AppendLine("点击[否]将会终止当前操作任务.");
+                sb.AppendLine("===========================");
+
+                foreach (var p in list)
+                {
+                    sb.AppendLine(p.MachineName.PadRight(16) + " " + "[" + p.Id + "]");
+                }
+
+                if (MessageBox.Show(sb.ToString(), "侦测到目标进程正在运行", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                {
+                    return false;
+                }
+
+                foreach (var p in list)
+                {
+                    p.Kill();
+                }
+            }
+
+            return true;
         }
 
         #region 下载文件

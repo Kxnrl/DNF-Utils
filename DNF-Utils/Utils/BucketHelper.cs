@@ -2,9 +2,11 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text;
 using System.Windows.Forms;
 
 namespace DNF_Utils.Utils
@@ -38,11 +40,11 @@ namespace DNF_Utils.Utils
 
                 try
                 {
-                    using (var registry = Registry.LocalMachine.CreateSubKey(IFEOKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+                    using (var registry = Registry.LocalMachine.CreateSubKey(IFEOKey, true))
                     {
                         foreach (var app in IFEOList)
                         {
-                            var sub = registry.CreateSubKey(app, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                            var sub = registry.CreateSubKey(app, true);
                             var val = sub.GetValue("Debugger", "Not Set", RegistryValueOptions.None)?.ToString();
                             var ter = BuildPath(app);
 
@@ -67,14 +69,17 @@ namespace DNF_Utils.Utils
             {
                 var count = 0;
 
+                if (!KillAllPrograms())
+                    return false;
+
                 MessageBox.Show("若安全管家/助手提示IFEO劫持(系统映像劫持)请选择信任本程序." + Environment.NewLine + "本程序利用Windows IFEO功能对全家桶进行拦截." + Environment.NewLine + "详情可百度IFEO", "注意", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 foreach (var app in IFEOList)
                 {
                     try
                     {
-                        using (var reg = Registry.LocalMachine.CreateSubKey(IFEOKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
-                        using (var sub = reg.CreateSubKey(app, RegistryKeyPermissionCheck.ReadWriteSubTree))
+                        using (var reg = Registry.LocalMachine.CreateSubKey(IFEOKey, true))
+                        using (var sub = reg.CreateSubKey(app, true))
                         {
                             if (deny)
                             {
@@ -95,6 +100,43 @@ namespace DNF_Utils.Utils
                 }
 
                 return count == IFEOList.Count;
+            }
+
+            static bool KillAllPrograms()
+            {
+                var list = new List<Process>();
+                foreach (var exe in new string[] { "DNF", "GameLoader", "CrossProxy", "TPHelper", "tgp_gamead", "TPHelper.Installer", "CrossProxy", "TenioDL", "TQMCenter" })
+                {
+                    foreach (var p in Process.GetProcessesByName(exe))
+                    {
+                        list.Add(p);
+                    }
+                }
+
+                if (list.Count > 0)
+                {
+                    var sb = new StringBuilder("侦测到以下程序", 10240);
+                    sb.AppendLine("点击[是]将会强制关闭所有进程,");
+                    sb.AppendLine("点击[否]将会终止当前操作任务.");
+                    sb.AppendLine("===========================");
+
+                    foreach (var p in list)
+                    {
+                        sb.AppendLine(p.MachineName.PadRight(16) + " " + "[" + p.Id + "]");
+                    }
+
+                    if (MessageBox.Show(sb.ToString(), "侦测到目标进程正在运行", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    {
+                        return false;
+                    }
+
+                    foreach (var p in list)
+                    {
+                        p.Kill();
+                    }
+                }
+
+                return true;
             }
         }
 

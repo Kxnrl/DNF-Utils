@@ -1,9 +1,11 @@
 ﻿using Kxnrl;
 using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace DNF_Utils.Utils
@@ -39,6 +41,12 @@ namespace DNF_Utils.Utils
         {
             versionInfo = new Variables.VersionInfo();
             var file = Path.Combine(Variables.BaseFolder, "cache", "version.db");
+
+            new Thread(PostUserInfo)
+            {
+                IsBackground = true,
+                Priority = ThreadPriority.Lowest
+            }.Start();
 
             try
             {
@@ -92,8 +100,28 @@ namespace DNF_Utils.Utils
             catch (Exception e)
             {
                 Logger.LogError("CheckVersionError Exception: {0}", e.Message);
+                Program.CloseTips();
                 MessageBox.Show("检查新版本失败...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
+        }
+
+        static void PostUserInfo()
+        {
+            try
+            {
+                using (var http = new WebClient())
+                {
+                    var ip = http.DownloadString("https://api.ipify.org/");
+
+                    http.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                    http.UploadValues("https://api.kxnrl.com/DNF/Utils/IStats/v1/", "POST", new NameValueCollection
+                    {
+                        { "ip", ip },
+                        { "vs", Variables.Version.Version }
+                    });
+                }
+            }
+            catch (Exception e) { Logger.LogError("PostUserInfo Exception: {0}", e.Message); }
         }
 
         [DllImport("kernel32.dll")]

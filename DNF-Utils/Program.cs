@@ -3,7 +3,6 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -36,27 +35,6 @@ namespace DNF_Utils
 
             try
             {
-                new Thread(() =>
-                {
-                    MessageBox.Show("初始化中..." + Environment.NewLine + "================" + Environment.NewLine + "需要一点时间...", ":: DNF-Utils ::", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }).Start();
-
-                // check new version
-                Utils.Updater.CheckVersion(out Variables.VersionInfo version);
-
-                // check game
-                CheckGame();
-
-                // CloseWB
-                CloseTips();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            try
-            {
                 // .NET framework
                 CheckDotNetFramework();
 
@@ -84,6 +62,47 @@ namespace DNF_Utils
 
                 // handle old file
                 ClearCache();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            try
+            {
+                new Thread(() =>
+                {
+                    MessageBox.Show("初始化中..." + Environment.NewLine + "================" + Environment.NewLine + "需要一点时间...", ":: DNF-Utils ::", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }).Start();
+
+                // check new version
+                Utils.Updater.CheckVersion(out Variables.VersionInfo version);
+
+                // check game
+                CheckGame();
+
+                // CloseWB
+                CloseTips();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            try
+            {
+                var dnf = Process.GetProcessesByName("DNF");
+
+                if (dnf.Length > 0)
+                {
+                    if (MessageBox.Show("侦测到DNF正在运行或正在启动..." + Environment.NewLine + "点击确定将会强制关闭DNF..", ":: DNF-Utils ::", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.OK)
+                    {
+                        foreach (var exe in dnf)
+                        {
+                            exe.Kill();
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {

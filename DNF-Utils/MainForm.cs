@@ -1,5 +1,6 @@
 ﻿using Kxnrl;
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace DNF_Utils
@@ -33,11 +34,18 @@ namespace DNF_Utils
             // CPU熔断漏洞
             Button_MeltdownSpectre.Text = (Utils.MeltdownSpectre.Check() ? "还原" : "禁用") + "熔断/幽灵补丁";
 
-            // 清空垃圾文件
-            //if (Settings.lastRunningVersion.Equals(Variables.Version.Version))
-
             // Active
             Activate();
+            var myhandle = Handle;
+            new Thread(() =>
+            {
+                Thread.Sleep(3000);
+                Win32Api.SetForegroundWindow(myhandle);
+            })
+            {
+                Priority = ThreadPriority.Lowest,
+                IsBackground = true
+            };
         }
 
         private void Button_TXBucket_Click(object sender, EventArgs e)
