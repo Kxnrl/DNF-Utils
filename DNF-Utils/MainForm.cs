@@ -1,6 +1,7 @@
 ﻿using Kxnrl;
 using System;
-using System.Threading;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace DNF_Utils
@@ -17,6 +18,12 @@ namespace DNF_Utils
             Icon = Properties.Resources.icon;
             Text = "DNF实用工具集 v" + Variables.Version.Version + "      " + "by Kyle";
 
+            // 按钮?
+            CheckButtonState();
+        }
+
+        private void CheckButtonState()
+        {
             // 检查全家桶
             Button_TXBucket.Text = ((Utils.BucketHelper.IEFO.CheckIFEO() && Utils.BucketHelper.FileAccess.CheckAccess()) ? "恢复" : "禁用") + "TX全家桶";
 
@@ -34,18 +41,14 @@ namespace DNF_Utils
             // CPU熔断漏洞
             Button_MeltdownSpectre.Text = (Utils.MeltdownSpectre.Check() ? "还原" : "禁用") + "熔断/幽灵补丁";
 
-            // Active
-            Activate();
-            var myhandle = Handle;
-            new Thread(() =>
-            {
-                Thread.Sleep(3000);
-                Win32Api.SetForegroundWindow(myhandle);
-            })
-            {
-                Priority = ThreadPriority.Lowest,
-                IsBackground = true
-            };
+            // 黑屏修复
+            Button_BlackScreen.Enabled = Utils.BlackScreen.Check();
+
+            // 全屏修复
+            Button_FullScreen.Enabled = Utils.FullScreen.Check();
+
+            // 游戏修复
+            Button_Repair.Enabled = Process.GetProcessesByName("Repair").Length == 0;
         }
 
         private void Button_TXBucket_Click(object sender, EventArgs e)
@@ -81,6 +84,8 @@ namespace DNF_Utils
                 MessageBox.Show(text.Replace("一键", "") + "成功!", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 from.Text = hndl ? text.Replace("禁用", "恢复") : text.Replace("恢复", "禁用");
             }
+
+            CheckButtonState();
         }
 
         private void Button_BlueScreen_Click(object sender, EventArgs e)
@@ -98,6 +103,8 @@ namespace DNF_Utils
                 }
                 from.Text = hndl ? text.Replace("还原", "修复") : text.Replace("修复", "还原");
             }
+
+            CheckButtonState();
         }
 
         private void Button_MeltdownSpectre_Click(object sender, EventArgs e)
@@ -115,6 +122,8 @@ namespace DNF_Utils
                 }
                 from.Text = hndl ? text.Replace("还原", "禁用") : text.Replace("禁用", "还原");
             }
+
+            CheckButtonState();
         }
 
         private void Button_Cleaner_Click(object sender, EventArgs e)
@@ -136,34 +145,81 @@ namespace DNF_Utils
                 var curl = totalBytes / lvls;
                 MessageBox.Show("清理完成!" + Environment.NewLine + "已释放 [" + curl.ToString("f2") + unit + "] 空间", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
+            CheckButtonState();
+        }
+
+        private void Button_Repair_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(Path.Combine(Variables.GameFolder, "TCLS", "Repair.exe"));
+                WindowState = FormWindowState.Minimized;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("发生异常: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            CheckButtonState();
+        }
+
+        private void Button_BlackScreen_Click(object sender, EventArgs e)
+        {
+            if (Utils.BlackScreen.Fix())
+            {
+                MessageBox.Show("修复换线卡黑屏成功." + Environment.NewLine + "已清理DNF缓存.", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            CheckButtonState();
+        }
+
+        private void Button_FullScreen_Click(object sender, EventArgs e)
+        {
+            if (Utils.FullScreen.Fix())
+            {
+                MessageBox.Show("修复[全屏黑屏/卡全屏]成功.", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            CheckButtonState();
+        }
+
+        private void Button_FileAccess_Click(object sender, EventArgs e)
+        {
+            if (Utils.FileAccess.Set(false))
+            {
+                MessageBox.Show("修复[游戏文件权限]成功.", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            CheckButtonState();
         }
 
         private void Button_PatchCharacter_Click(object sender, EventArgs e)
         {
             Variables.PatchMode = Variables.PatchType.Character;
-            var child = new PatchForm();
-            child.ShowDialog(this);
+            using (var child = new PatchForm())
+                child.ShowDialog(this);
         }
 
         private void Button_PatchOptimized_Click(object sender, EventArgs e)
         {
             Variables.PatchMode = Variables.PatchType.Optimization;
-            var child = new PatchForm();
-            child.ShowDialog(this);
+            using (var child = new PatchForm())
+                child.ShowDialog(this);
         }
 
         private void Button_PatchMisc_Click(object sender, EventArgs e)
         {
             Variables.PatchMode = Variables.PatchType.Miscellaneous;
-            var child = new PatchForm();
-            child.ShowDialog(this);
+            using (var child = new PatchForm())
+                child.ShowDialog(this);
         }
 
         private void Button_PatchTheme_Click(object sender, EventArgs e)
         {
             Variables.PatchMode = Variables.PatchType.Theme;
-            var child = new ThemeForm();
-            child.ShowDialog(this);
+            using (var child = new ThemeForm())
+                child.ShowDialog(this);
         }
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)

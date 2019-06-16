@@ -86,7 +86,9 @@ namespace DNF_Utils.Utils
                         versionInfo.UpdateURL = GetIniString(file, "Version", "updateUrl");
                         versionInfo.Description = GetIniString(file, "Description", "description");
                         versionInfo.Website = GetIniString(file, "Description", "website");
-                        
+
+                        Program.CloseTips();
+
                         if (MessageBox.Show("发现新版本 [" + versionInfo.Version + "]" + Environment.NewLine + "是否立即更新? ", "发现新版本",
                             MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
                             == DialogResult.Yes)

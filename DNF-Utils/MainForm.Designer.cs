@@ -38,6 +38,10 @@
             this.Button_PatchMisc = new System.Windows.Forms.Button();
             this.Button_PatchOptimized = new System.Windows.Forms.Button();
             this.Button_PatchCharacter = new System.Windows.Forms.Button();
+            this.Button_Repair = new System.Windows.Forms.Button();
+            this.Button_BlackScreen = new System.Windows.Forms.Button();
+            this.Button_FullScreen = new System.Windows.Forms.Button();
+            this.Button_FileAccess = new System.Windows.Forms.Button();
             this.UtilsGroup.SuspendLayout();
             this.PatchGroup.SuspendLayout();
             this.SuspendLayout();
@@ -48,6 +52,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.UtilsGroup.BackColor = System.Drawing.Color.Transparent;
+            this.UtilsGroup.Controls.Add(this.Button_FileAccess);
+            this.UtilsGroup.Controls.Add(this.Button_FullScreen);
+            this.UtilsGroup.Controls.Add(this.Button_BlackScreen);
+            this.UtilsGroup.Controls.Add(this.Button_Repair);
             this.UtilsGroup.Controls.Add(this.Button_Cleaner);
             this.UtilsGroup.Controls.Add(this.Button_MeltdownSpectre);
             this.UtilsGroup.Controls.Add(this.Button_BlueScreen);
@@ -76,7 +84,7 @@
             this.Button_Cleaner.ForeColor = System.Drawing.Color.DarkViolet;
             this.Button_Cleaner.Location = new System.Drawing.Point(8, 115);
             this.Button_Cleaner.Name = "Button_Cleaner";
-            this.Button_Cleaner.Size = new System.Drawing.Size(484, 25);
+            this.Button_Cleaner.Size = new System.Drawing.Size(235, 25);
             this.Button_Cleaner.TabIndex = 3;
             this.Button_Cleaner.TabStop = false;
             this.Button_Cleaner.Text = "删除更新残留";
@@ -98,7 +106,7 @@
             this.Button_MeltdownSpectre.ForeColor = System.Drawing.Color.DarkViolet;
             this.Button_MeltdownSpectre.Location = new System.Drawing.Point(8, 84);
             this.Button_MeltdownSpectre.Name = "Button_MeltdownSpectre";
-            this.Button_MeltdownSpectre.Size = new System.Drawing.Size(484, 25);
+            this.Button_MeltdownSpectre.Size = new System.Drawing.Size(235, 25);
             this.Button_MeltdownSpectre.TabIndex = 2;
             this.Button_MeltdownSpectre.TabStop = false;
             this.Button_MeltdownSpectre.Text = "幽灵熔断漏洞";
@@ -120,7 +128,7 @@
             this.Button_BlueScreen.ForeColor = System.Drawing.Color.DarkViolet;
             this.Button_BlueScreen.Location = new System.Drawing.Point(8, 53);
             this.Button_BlueScreen.Name = "Button_BlueScreen";
-            this.Button_BlueScreen.Size = new System.Drawing.Size(484, 25);
+            this.Button_BlueScreen.Size = new System.Drawing.Size(235, 25);
             this.Button_BlueScreen.TabIndex = 1;
             this.Button_BlueScreen.TabStop = false;
             this.Button_BlueScreen.Text = "挂机蓝屏修复";
@@ -143,7 +151,7 @@
             this.Button_TXBucket.ForeColor = System.Drawing.Color.DarkViolet;
             this.Button_TXBucket.Location = new System.Drawing.Point(8, 22);
             this.Button_TXBucket.Name = "Button_TXBucket";
-            this.Button_TXBucket.Size = new System.Drawing.Size(484, 25);
+            this.Button_TXBucket.Size = new System.Drawing.Size(235, 25);
             this.Button_TXBucket.TabIndex = 0;
             this.Button_TXBucket.TabStop = false;
             this.Button_TXBucket.Text = "干掉垃圾插件";
@@ -259,6 +267,95 @@
             this.Button_PatchCharacter.UseVisualStyleBackColor = true;
             this.Button_PatchCharacter.Click += new System.EventHandler(this.Button_PatchCharacter_Click);
             // 
+            // Button_Repair
+            // 
+            this.Button_Repair.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Repair.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Button_Repair.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
+            this.Button_Repair.FlatAppearance.BorderSize = 0;
+            this.Button_Repair.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_Repair.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_Repair.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Repair.Font = new System.Drawing.Font("微软雅黑 Light", 9F);
+            this.Button_Repair.ForeColor = System.Drawing.Color.DarkViolet;
+            this.Button_Repair.Location = new System.Drawing.Point(257, 22);
+            this.Button_Repair.Name = "Button_Repair";
+            this.Button_Repair.Size = new System.Drawing.Size(235, 25);
+            this.Button_Repair.TabIndex = 4;
+            this.Button_Repair.TabStop = false;
+            this.Button_Repair.Text = "启动游戏修复";
+            this.Button_Repair.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Button_Repair.UseVisualStyleBackColor = true;
+            this.Button_Repair.Click += new System.EventHandler(this.Button_Repair_Click);
+            // 
+            // Button_BlackScreen
+            // 
+            this.Button_BlackScreen.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_BlackScreen.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Button_BlackScreen.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
+            this.Button_BlackScreen.FlatAppearance.BorderSize = 0;
+            this.Button_BlackScreen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_BlackScreen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_BlackScreen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_BlackScreen.ForeColor = System.Drawing.Color.DarkViolet;
+            this.Button_BlackScreen.Location = new System.Drawing.Point(257, 53);
+            this.Button_BlackScreen.Name = "Button_BlackScreen";
+            this.Button_BlackScreen.Size = new System.Drawing.Size(235, 25);
+            this.Button_BlackScreen.TabIndex = 5;
+            this.Button_BlackScreen.TabStop = false;
+            this.Button_BlackScreen.Text = "修复换线黑屏/掉线";
+            this.Button_BlackScreen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Button_BlackScreen.UseVisualStyleBackColor = true;
+            this.Button_BlackScreen.Click += new System.EventHandler(this.Button_BlackScreen_Click);
+            // 
+            // Button_FullScreen
+            // 
+            this.Button_FullScreen.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_FullScreen.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Button_FullScreen.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
+            this.Button_FullScreen.FlatAppearance.BorderSize = 0;
+            this.Button_FullScreen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_FullScreen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_FullScreen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_FullScreen.ForeColor = System.Drawing.Color.DarkViolet;
+            this.Button_FullScreen.Location = new System.Drawing.Point(257, 84);
+            this.Button_FullScreen.Name = "Button_FullScreen";
+            this.Button_FullScreen.Size = new System.Drawing.Size(235, 25);
+            this.Button_FullScreen.TabIndex = 6;
+            this.Button_FullScreen.TabStop = false;
+            this.Button_FullScreen.Text = "修复全屏黑屏/卡全屏";
+            this.Button_FullScreen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Button_FullScreen.UseVisualStyleBackColor = true;
+            this.Button_FullScreen.Click += new System.EventHandler(this.Button_FullScreen_Click);
+            // 
+            // Button_FileAccess
+            // 
+            this.Button_FileAccess.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_FileAccess.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Button_FileAccess.FlatAppearance.BorderColor = System.Drawing.Color.DeepSkyBlue;
+            this.Button_FileAccess.FlatAppearance.BorderSize = 0;
+            this.Button_FileAccess.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_FileAccess.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_FileAccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_FileAccess.ForeColor = System.Drawing.Color.DarkViolet;
+            this.Button_FileAccess.Location = new System.Drawing.Point(257, 115);
+            this.Button_FileAccess.Name = "Button_FileAccess";
+            this.Button_FileAccess.Size = new System.Drawing.Size(235, 25);
+            this.Button_FileAccess.TabIndex = 7;
+            this.Button_FileAccess.TabStop = false;
+            this.Button_FileAccess.Text = "修复更新失败/获取权限";
+            this.Button_FileAccess.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Button_FileAccess.UseVisualStyleBackColor = true;
+            this.Button_FileAccess.Click += new System.EventHandler(this.Button_FileAccess_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -273,6 +370,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DNF 实用工具集";
+            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.UtilsGroup.ResumeLayout(false);
@@ -293,6 +391,10 @@
         private System.Windows.Forms.Button Button_PatchTheme;
         private System.Windows.Forms.Button Button_PatchMisc;
         private System.Windows.Forms.Button Button_PatchOptimized;
+        private System.Windows.Forms.Button Button_Repair;
+        private System.Windows.Forms.Button Button_FullScreen;
+        private System.Windows.Forms.Button Button_BlackScreen;
+        private System.Windows.Forms.Button Button_FileAccess;
     }
 }
 

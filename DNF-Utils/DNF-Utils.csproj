@@ -52,8 +52,7 @@
     <StartupObject>DNF_Utils.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\dfo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -101,12 +100,17 @@
     <Compile Include="ThemeForm.Designer.cs">
       <DependentUpon>ThemeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ACLHelper.cs" />
+    <Compile Include="Utils\BlackScreen.cs" />
     <Compile Include="Utils\BlueScreen.cs" />
     <Compile Include="Utils\BucketHelper.cs" />
     <Compile Include="Utils\Cleaner.cs" />
+    <Compile Include="Utils\FileAccess.cs" />
     <Compile Include="Utils\Finder.cs" />
+    <Compile Include="Utils\FullScreen.cs" />
     <Compile Include="Utils\MeltdownSpectre.cs" />
     <Compile Include="Utils\NPKHelper.cs" />
+    <Compile Include="Utils\ProcKiller.cs" />
     <Compile Include="Utils\Updater.cs" />
     <Compile Include="Variables.cs" />
     <EmbeddedResource Include="MainForm.resx">

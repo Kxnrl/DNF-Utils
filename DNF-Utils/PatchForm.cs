@@ -281,7 +281,7 @@ namespace DNF_Utils
             }
             else
             {
-                if (!KillAllProcess())
+                if (!Utils.ProcKiller.KillAll(new string[] { "DNF" }))
                     return;
 
                 SetEnabled(false);
@@ -474,36 +474,6 @@ namespace DNF_Utils
             {
                 MessageBox.Show("发生错误: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        static bool KillAllProcess()
-        {
-            var list = Process.GetProcessesByName("DNF");
-
-            if (list.Length > 0)
-            {
-                var sb = new StringBuilder("侦测到以下程序", 10240);
-                sb.AppendLine("点击[是]将会强制关闭所有进程,");
-                sb.AppendLine("点击[否]将会终止当前操作任务.");
-                sb.AppendLine("===========================");
-
-                foreach (var p in list)
-                {
-                    sb.AppendLine(p.MachineName.PadRight(16) + " " + "[" + p.Id + "]");
-                }
-
-                if (MessageBox.Show(sb.ToString(), "侦测到目标进程正在运行", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                {
-                    return false;
-                }
-
-                foreach (var p in list)
-                {
-                    p.Kill();
-                }
-            }
-
-            return true;
         }
     }
 }
