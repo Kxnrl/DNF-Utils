@@ -5,6 +5,7 @@
         private string _Section;
         private string _Execute;
         private string _Message;
+        private bool   _ByBlock;
 
         public IFEOException() : base() { }
         public IFEOException(string message) : base(message) { _Message = message; }
@@ -12,34 +13,30 @@
         public IFEOException(string message, System.Exception innerException) : base(message, innerException) { _Message = message; }
 
         // custom
-        public IFEOException(string section, string application, string message) : base (message)
+        public IFEOException(string section, string application, bool block, string message) : base (message)
         {
             _Section = section;
             _Execute = application;
             _Message = message;
+            _ByBlock = block;
         }
 
         public override string Message
         {
-            get {
-                    return string.Format("节点: {0}{1}程序: {2}{3}异常: {4}",
+            get => _ByBlock ?
+                    string.Format("节点: {0}{1}程序: {2}{3}异常: {4}{5}{6}{7}{8}{9}{10}",
+                        _Section, System.Environment.NewLine,
+                        _Execute, System.Environment.NewLine,
+                        _Message, System.Environment.NewLine,
+                        "发生此类异常一般为程序权限被360/电脑管家等杀毒软件拦截", System.Environment.NewLine,
+                        "若您的杀软已退出", System.Environment.NewLine,
+                        "请重启程序并关闭杀软的自我保护功能") : 
+                    string.Format("节点: {0}{1}程序: {2}{3}异常: {4}",
                         _Section, System.Environment.NewLine,
                         _Execute, System.Environment.NewLine,
                         _Message);
-            }
-        }
 
-        /*
-        public string Section
-        {
-            get { return _Section; }
         }
-
-        public string Application
-        {
-            get { return _Execute; }
-        }
-        */
     }
 
     class FileException : System.Exception
@@ -61,12 +58,7 @@
 
         public override string Message
         {
-            get
-            {
-                return string.Format("路径: {0}{1}异常: {2}",
-                    _File, System.Environment.NewLine,
-                    _Message);
-            }
+            get => string.Format("路径: {0}{1}异常: {2}", _File, System.Environment.NewLine, _Message);
         }
     }
 

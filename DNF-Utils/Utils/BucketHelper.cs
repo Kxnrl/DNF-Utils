@@ -93,9 +93,13 @@ namespace DNF_Utils.Utils
                             count++;
                         }
                     }
+                    catch (UnauthorizedAccessException e)
+                    {
+                        throw new IFEOException(IFEOKey, app, true, e.Message);
+                    }
                     catch (Exception e)
                     {
-                        throw new IFEOException(IFEOKey, app, e.Message);
+                        throw new IFEOException(IFEOKey, app, false, e.Message);
                     }
                 }
 
